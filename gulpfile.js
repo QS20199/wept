@@ -7,13 +7,13 @@ var prodConfig = require('./webpack.prod')
 var gutil = require('gulp-util')
 
 // build server javascript
-gulp.task('babel', function () {
-  return gulp.src('lib/*.js')
-  .pipe(sourcemaps.init())
-  .pipe(babel())
-  .pipe(sourcemaps.write('.'))
-  .pipe(gulp.dest('build'))
-})
+// gulp.task('babel', function () {
+//   return gulp.src('lib/*.js')
+//   .pipe(sourcemaps.init())
+//   .pipe(babel())
+//   .pipe(sourcemaps.write('.'))
+//   .pipe(gulp.dest('build'))
+// })
 
 gulp.task('webpack:prod', function () {
   prodConfig.debug = false
@@ -36,16 +36,7 @@ gulp.task('webpack', function () {
 })
 
 gulp.task('watch', function () {
-  gulp.watch('lib/*.js')
-    .on('change', function (file) {
-      gulp.src('lib/*.js')
-        .pipe(babel())
-        .pipe(gulp.dest('build'))
-        .end(() => {
-          gutil.log('Rebuild ' + file.path)
-        })
-    })
-  //gulp.watch('src/*.js', ['webpack'])
+  gulp.watch('src/*.js', ['webpack'])
 
   config.watch = true
   config.debug = true
@@ -57,8 +48,8 @@ gulp.task('watch', function () {
     .pipe(gulp.dest('public/script'))
 })
 
-gulp.task('prepublish', ['babel', 'webpack:prod'])
+gulp.task('prepublish', ['webpack:prod'])
 
-gulp.task('build', ['babel', 'webpack'])
+gulp.task('build', ['webpack'])
 
-gulp.task('default', ['babel', 'watch'])
+gulp.task('default', ['watch'])
