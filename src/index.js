@@ -47,48 +47,48 @@ Bus.on('route', (n, curr) => {
   tabbar.show(curr.url)
 })
 
-let socket = new WebSocket(`ws://${location.host}`)
-socket.onopen = function () {
-  console.log('=> socket open')
-}
+// let socket = new WebSocket(`ws://${location.host}`)
+// socket.onopen = function () {
+//   console.log('=> socket open')
+// }
 
-socket.onmessage = function (e) {
-  let data = JSON.parse(e.data)
-  let p = data.path
-  let pages = window.__wxConfig__.pages
-  if (data.type == 'error') {
-    toast(data.msg || '未知错误', {type: 'error'})
-  } else if (data.type == 'reload'){
-    if (!p) {
-      util.reload()
-    } else {
-      let path = p.replace(/\.(\w+)$/, '')
-      let isGlobal = pages.indexOf(path) == -1
-      if (isGlobal || /\.(js|json)$/.test(p) ) {
-        window.location.reload()
-        return
-      }
-      if (/\.wxss$/.test(p)) {
-        eachView(view => {
-          if (path == view.path) view.reloadWxss(p)
-        })
-      } else if (/\.wxml$/.test(p)) {
-        eachView(view => {
-          if (path == view.path) view.reloadWxml(path, isGlobal)
-        })
-      }
-    }
-  }
-}
+// socket.onmessage = function (e) {
+//   let data = JSON.parse(e.data)
+//   let p = data.path
+//   let pages = window.__wxConfig__.pages
+//   if (data.type == 'error') {
+//     toast(data.msg || '未知错误', {type: 'error'})
+//   } else if (data.type == 'reload'){
+//     if (!p) {
+//       util.reload()
+//     } else {
+//       let path = p.replace(/\.(\w+)$/, '')
+//       let isGlobal = pages.indexOf(path) == -1
+//       if (isGlobal || /\.(js|json)$/.test(p) ) {
+//         window.location.reload()
+//         return
+//       }
+//       if (/\.wxss$/.test(p)) {
+//         eachView(view => {
+//           if (path == view.path) view.reloadWxss(p)
+//         })
+//       } else if (/\.wxml$/.test(p)) {
+//         eachView(view => {
+//           if (path == view.path) view.reloadWxml(path, isGlobal)
+//         })
+//       }
+//     }
+//   }
+// }
 
-socket.onerror = function (e) {
-  console.error('socket error ' + e.message)
-}
+// socket.onerror = function (e) {
+//   console.error('socket error ' + e.message)
+// }
 
-window.addEventListener('unload', function () {
-  // reload all pages
-  socket.close()
-})
+// window.addEventListener('unload', function () {
+//   // reload all pages
+//   socket.close()
+// })
 
 window.addEventListener('resize', debounce(function () {
   eachView(view => {
